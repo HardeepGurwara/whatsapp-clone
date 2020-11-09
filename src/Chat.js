@@ -18,18 +18,20 @@ function Chat() {
   const [messages, setMessages] = useState([]);
   const [{ user }, dispatch] = useStateValue();
   useEffect(() => {
-    db.collection("rooms")
-      .doc(roomID)
-      .onSnapshot((snapshot) => {
-        setRoomName(snapshot.data().name);
-      });
-    db.collection("rooms")
-      .doc(roomID)
-      .collection("messages")
-      .orderBy("timestamp", "asc")
-      .onSnapshot((snapshot) =>
-        setMessages(snapshot.docs.map((doc) => doc.data()))
-      );
+    if (roomID) {
+      db.collection("rooms")
+        .doc(roomID)
+        .onSnapshot((snapshot) => {
+          setRoomName(snapshot.data().name);
+        });
+      db.collection("rooms")
+        .doc(roomID)
+        .collection("messages")
+        .orderBy("timestamp", "asc")
+        .onSnapshot((snapshot) =>
+          setMessages(snapshot.docs.map((doc) => doc.data()))
+        );
+    }
   }, [roomID]);
 
   useEffect(() => {
